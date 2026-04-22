@@ -12,7 +12,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.brands.index');
     }
 
     /**
@@ -20,7 +20,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.brands.create');
     }
 
     /**
@@ -28,7 +28,20 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+        ]);
+
+        Brand::create(
+            [
+                'name' => $request->name,
+                'description' => $request->description,
+            ]
+        );
+
+        return redirect()->route('brands.index')->with('success', 'Brand created successfully.');
     }
 
     /**
