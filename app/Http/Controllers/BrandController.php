@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Symfony\Component\Finder\Finder;
 
 class BrandController extends Controller
 {
@@ -12,7 +13,8 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return view('pages.brands.index');
+        $brands = Brand::all();
+        return view('pages.brands.index', compact('brands'));
     }
 
     /**
@@ -31,7 +33,7 @@ class BrandController extends Controller
         
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
         ]);
 
         Brand::create(
@@ -44,20 +46,13 @@ class BrandController extends Controller
         return redirect()->route('brands.index')->with('success', 'Brand created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Brand $brand)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Brand $brand)
     {
-        //
+        return view('pages.brands.edit', compact('brand'));
     }
 
     /**
@@ -65,7 +60,19 @@ class BrandController extends Controller
      */
     public function update(Request $request, Brand $brand)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+        ]);
+
+        $brand->update(
+            [
+                'name' => $request->name,
+                'description' => $request->description,
+            ]
+        );
+
+        return redirect()->route('brands.index')->with('success', 'Brand updated successfully.');
     }
 
     /**
@@ -73,6 +80,9 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
-        //
+    
+        $brand->delete();
+
+        return redirect()->route('brands.index')->with('success', 'Brand deleted successfully.');
     }
 }
