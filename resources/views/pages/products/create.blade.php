@@ -22,7 +22,7 @@
         <div class="col-sm-12">
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form action="{{ route('products.store') }}" method="POST">
+                    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-12">
@@ -68,24 +68,31 @@
                                     <label>Category <span class="login-danger">*</span></label>
 
                             
-                                    <select class="form-control select">
+                                    <select class="form-control select" name="category_id">
                                         <option>Select Category</option>
                                         @foreach($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
                                     </select>
+
+                                     @error('category_id')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Brand <span class="login-danger">*</span></label>
-                                    <select class="form-control select">
+                                    <select class="form-control select" name="brand_id">
                                         <option>Select Brand</option>
                                         @foreach($brands as $brand)
                                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                                         @endforeach
                                     </select>
+                                     @error('brand_id')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -105,8 +112,12 @@
                                     <label>Upload Product Photo (150px X 150px)</label>
                                     <div class="uplod">
                                         <label class="file-upload image-upbtn mb-0">
-                                            Choose File <input type="file">
+                                            Choose File <input type="file" name="image">
                                         </label>
+                                        
+                                        @error('image')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
