@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -24,6 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('brands', BrandController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
+    Route::resource('suppliers', SupplierController::class);
+    Route::resource('customers', CustomerController::class);
 
         // or you can define routes individually if you prefer
 

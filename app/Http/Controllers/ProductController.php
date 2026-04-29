@@ -103,7 +103,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $categories = Category::all();
+        $brands = Brand::all();
+        return view('pages.products.edit', compact('product', 'categories', 'brands'));
     }
 
     /**
@@ -111,14 +113,67 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'cost_price' => 'required|numeric',
+            'selling_price' => 'required|numeric',
+            'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'required|exists:brands,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5192',
+        ]);
+
+        // Handle file upload code starts here
+        if ($request->hasFile('image')) {
+
+           $imageFile = $request->file('image'); //hf8uzYEDYOlEJqDWXIjvK73SOnnu7oj9KoiqToZV.jpg
+           $imageFileName = time() . '_' . $imageFile->getClientOriginalName(); //1697059200_hf8uzYEDYOlEJqDWXIjvK73SOnnu7oj9KoiqToZV.jpg
+           $imagePath = Storage::disk('public')->putFileAs('product_images', $imageFile, $imageFileName);
+           
+        } else {
+            $imagePath = $product->image; // Keep the existing image path if no new image is uploaded
+        }
+        // Handle file upload code ends here
+
+
+        // when i re-upload the image i want to delete the old image from storage code starts here
+        if ($request->hasFile('image') && $product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
+        // when i re-upload the image i want to delete the old image from storage code ends
+
+        
+        // Update product data in the database code starts here
+        $product->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'cost_price' => $request->cost_price,
+            'selling_price' => $request->selling_price,
+            'category_id' => $request->category_id,
+            'brand_id' => $request->brand_id,
+            'image' => $imagePath,
+        ]);
+
+        // Update product data in the database code ends here
+
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Product $product)
     {
-        //
+        // Delete the product image from storage if it exists
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
+
+        // Delete the product from the database
+        $product->delete();
+
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }
