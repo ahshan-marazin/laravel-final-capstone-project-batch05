@@ -139,7 +139,7 @@
                         alt="Soeng Souy">
                     <div class="user-text">
                         <h6>Ahshan</h6>
-                        <p class="text-muted mb-0">Administrator</p>
+                        <p class="text-muted mb-0">{{ auth()->user()->name }}</p>
                     </div>
                 </span>
 
@@ -153,12 +153,15 @@
                     </div>
                     <div class="user-text">
                         <h6>Ahshan</h6>
-                        <p class="text-muted mb-0">Administrator</p>
+                        <p class="text-muted mb-0">{{ auth()->user()->name }}</p>
                     </div>
                 </div>
-                <a class="dropdown-item" href="profile.html">My Profile</a>
-                <a class="dropdown-item" href="inbox.html">Inbox</a>
-
+                <a class="dropdown-item" href="{{ route('profile.edit') }}">My Profile</a>
+                <form method="POST" action="{{ route('logout') }}" class="dropdown-item p-0">
+                    @csrf
+                    <button type="submit" class="dropdown-item">Logout</button>
+                </form>
+             
             </div>
         </li>
 

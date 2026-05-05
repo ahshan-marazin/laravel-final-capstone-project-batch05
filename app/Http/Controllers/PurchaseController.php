@@ -17,7 +17,9 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        //
+        $purchases = Purchase::with('supplier', 'purchaseItems.product.category','purchaseItems.product.brand')->get();
+        return view('pages.purchases.index', compact('purchases'));
+       
     }
 
     /**

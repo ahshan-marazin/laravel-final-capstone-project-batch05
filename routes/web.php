@@ -11,6 +11,21 @@ use App\Http\Controllers\InventoryTrackerController;
 use Illuminate\Support\Facades\Route;
 
 
+// This function checks if the current route matches the given route(s) and returns 'active' if it does, or an empty string otherwise.
+if (!function_exists('set_active')) {
+    function set_active($routes, $active = 'active')
+    {
+        $currentRoute = Route::currentRouteName();
+
+        if (is_array($routes)) {
+            return in_array($currentRoute, $routes) ? $active : '';
+        }
+
+        return $currentRoute === $routes ? $active : '';
+    }
+}
+
+
 Route::get('/', function () {
     return view('welcome');
 });
