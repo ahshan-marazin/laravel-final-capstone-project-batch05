@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
-            $table->date('sale_date');
+            $table->string('sale_date');
             $table->string('invoice_number')->unique();
             $table->decimal('sub_total', 10, 2);
             $table->decimal('discount', 10, 2);

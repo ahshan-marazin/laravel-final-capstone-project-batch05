@@ -8,6 +8,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\InventoryTrackerController;
+use App\Http\Controllers\SaleController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -46,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('suppliers', SupplierController::class);
     Route::resource('customers', CustomerController::class);
     Route::resource('purchases', PurchaseController::class);
+    Route::resource('sales', SaleController::class);
     Route::resource('current-stock', InventoryTrackerController::class)->only(['index']);
 
 
