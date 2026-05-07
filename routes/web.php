@@ -48,6 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('customers', CustomerController::class);
     Route::resource('purchases', PurchaseController::class);
     Route::resource('sales', SaleController::class);
+    Route::get('sales-invoice/{id}', [SaleController::class, 'generateInvoice'])->name('sales-invoice.generate');
+
     Route::resource('current-stock', InventoryTrackerController::class)->only(['index']);
 
 

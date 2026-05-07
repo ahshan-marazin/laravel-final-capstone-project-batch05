@@ -18,7 +18,10 @@ class SaleController extends Controller
      */
     public function index()
     {
-      
+
+    $sales = Sale::with(['customer', 'saleItems.product'])->orderBy('created_at', 'desc')->get();
+    return view('pages.sales.index', compact('sales'));
+
     }
 
     /**
@@ -41,15 +44,14 @@ class SaleController extends Controller
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'sale_date' => 'required',
-            'total' => 'required|numeric|min:0',
-            'final_discount' => 'required|numeric|min:0',
-            'final_total' => 'required|numeric|min:0',
-
+            'total' => 'required|numeric',
+            'final_discount' => 'required|numeric',
+            'final_total' => 'required|numeric',
             'product_id.*' => 'required|exists:products,id',
             'quantity.*' => 'required|numeric|min:1',
-            'discount.*' => 'required|numeric|min:0',
-            'selling_price.*' => 'required|numeric|min:0',
-            'final_price.*' => 'required|numeric|min:0',
+            'discount.*' => 'required|numeric',
+            'selling_price.*' => 'required|numeric',
+            'final_price.*' => 'required|numeric',
         ]);
 
         // Generate unique SKU code start
@@ -67,6 +69,8 @@ class SaleController extends Controller
         DB::beginTransaction();
 
         try{
+            // Convert date format from DD-MM-YYYY to YYYY-MM-DD
+            $saleDate = \Carbon\Carbon::createFromFormat('d-m-Y', $request->sale_date)->format('Y-m-d');
 
              foreach($request->product_id as $index => $productId) {
 
@@ -84,7 +88,7 @@ class SaleController extends Controller
 
             $sale=Sale::create([
                 'customer_id' => $request->customer_id,
-                'sale_date' => $request->sale_date,
+                'sale_date' => $saleDate,
                 'sub_total' => $request->total,
                 'discount' => $request->final_discount,
                 'net_total' => $request->final_total,
@@ -112,7 +116,8 @@ class SaleController extends Controller
             }
 
             DB::commit();
-             return redirect()->route('sales.index')->with('success', 'Sales created successfully.');
+             return redirect()->route('sales-invoice.generate', ['id' => $sale->id])->with('success', 'Sales created successfully.');
+
         }
 
         catch (\Exception $e) {
@@ -122,6 +127,12 @@ class SaleController extends Controller
         }
     }
 
+
+    public function generateInvoice($id)
+    {
+        $sale = Sale::with(['customer', 'saleItems.product'])->findOrFail($id);
+        return view('pages.sales.invoice', compact('sale'));
+    }
 
     /**
      * Display the specified resource.

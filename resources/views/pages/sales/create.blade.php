@@ -103,7 +103,7 @@
 
                                              <td>
                                                 <input type="number" class="form-control discount" name="discount[]"
-                                                    placeholder="discount">
+                                                    placeholder="discount" value="0" min="0" step="0.01">
                                             </td>
 
                                             <td>
@@ -122,20 +122,20 @@
                                 <div class="col-md-6">
                                     <div class="form-group local-forms">
                                         <label>Total</label>
-                                        <input class="form-control" id="total" name="total" type="number" readonly>
+                                        <input class="form-control" id="total" name="total" type="number" value="0" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group local-forms">
                                         <label>Final Discount</label>
-                                        <input class="form-control" id="final_discount" name="final_discount" type="number">
+                                        <input class="form-control" id="final_discount" name="final_discount" type="number" value="0" min="0" step="0.01">
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group local-forms">
                                         <label>Final Total</label>
-                                        <input class="form-control" id="final_total_input" name="final_total" type="number" readonly>
+                                        <input class="form-control" id="final_total_input" name="final_total" type="number" value="0" readonly>
                                     </div>
                                 </div>
 
@@ -160,6 +160,7 @@
         $('#addRowBtn').on('click', function() {
             let newRow = $('#saleItemsTable tbody tr:first').clone();
             newRow.find('input').val('');
+            newRow.find('.discount').val('0');
             newRow.find('select').val('');
             $('#saleItemsTable tbody').append(newRow);
         });

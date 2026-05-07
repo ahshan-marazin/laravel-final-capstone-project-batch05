@@ -64,6 +64,15 @@
                                 <li><a class="{{ set_active('purchases.create') }}" href="{{route('purchases.create') }}">Purchase Add</a></li>
                             </ul>
                         </li>
+                        <li class="submenu {{ set_active(['sales.index', 'sales.create']) }}">
+                            <a href="{{ route('sales.index') }}"><i class="fas fa-graduation-cap"></i> <span> Sales</span> <span
+                                    class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a class="{{ set_active('sales.index') }}" href="{{ route('sales.index') }}">Sale List</a></li>
+                                <li><a class="{{ set_active('sales.create') }}" href="{{route('sales.create') }}">Sale Add</a></li>
+                            </ul>
+                        </li>
+
                         <li class="submenu {{ set_active(['current-stock.index']) }}">
                             <a href="{{ route('current-stock.index') }}"><i class="fas fa-graduation-cap"></i> <span> Current Stock</span> <span
                                     class="menu-arrow"></span></a>

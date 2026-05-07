@@ -1,3 +1,4 @@
+{{-- 
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -44,8 +45,7 @@
             </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
-
+</x-guest-layout> --}}
 
 
 
@@ -83,18 +83,29 @@
                     <div class="login-right">
                         <div class="login-right-wrap">
                             <h1>Welcome to Preskool</h1>
-                            <p class="account-subtitle">Need an account? <a href="register.html">Sign Up</a></p>
+                            <p class="account-subtitle">Need an account? <a href="{{ route('register') }}">Sign Up</a></p>
                             <h2>Sign in</h2>
 
-                            <form action="index.html">
+                            <form method="POST" action="{{ route('login') }}">
+                                @csrf
+
                                 <div class="form-group">
                                     <label>Username <span class="login-danger">*</span></label>
-                                    <input class="form-control" type="text">
+                                    <input class="form-control" type="text" name="email" value="{{ old('email') }}" required autofocus>
+                                     @error('email')
+                                         <div class="text-danger">{{ $message }}</div>
+                                     @enderror
+
+                                       
                                     <span class="profile-views"><i class="fas fa-user-circle"></i></span>
                                 </div>
                                 <div class="form-group">
                                     <label>Password <span class="login-danger">*</span></label>
-                                    <input class="form-control pass-input" type="text">
+                                    <input class="form-control pass-input"  type="password" name="password" required autocomplete="current-password">
+                                        @error('password')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+
                                     <span class="profile-views feather-eye toggle-password"></span>
                                 </div>
                                 <div class="forgotpass">
@@ -104,7 +115,7 @@
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
-                                    <a href="forgot-password.html">Forgot Password?</a>
+                                    <a href="{{ route('password.request') }}">Forgot Password?</a>
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary btn-block" type="submit">Login</button>
